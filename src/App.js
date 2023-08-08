@@ -1,23 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import Title from "./components/Title";
+
 
 function App() {
+
+  const [showContent, setShowContent] = useState(true)
+
+  const [events, setEvents] = useState([
+    {title: "world", id:1},
+    {title: "hello", id:2}
+  ]) 
+
+  const handleDelete = (id) =>{
+    // const filteredEvents = events.filter((event) => {
+    //   return event.id !== id
+    // })
+
+    // setEvents(filteredEvents)
+
+    setEvents((props) => {
+      return props.filter((event) => {
+        return event.id !== id
+      })
+    })
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <Title />
+
+      {showContent && <button onClick={()=> setShowContent(false)}>Hide content</button>}
+      {!showContent && <button onClick={()=> setShowContent(true)}>show</button>}
+      {showContent && <div>
+        {events.length===0 && <h3>Empty</h3>}
+        {events.map((event)=>{
+          return(
+            <div key={event.id}>
+              <br/>
+              <h2 key={event.id}>{event.title}</h2>
+              <button onClick={() => handleDelete(event.id)}>delete</button>
+            </div>        
+          )
+          })}
+        </div>}
     </div>
   );
 }
